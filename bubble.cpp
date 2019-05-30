@@ -3,6 +3,7 @@
 #include <QPainter>
 #include <QMouseEvent>
 #include <QDebug>
+#include <QBitmap>
 
 Bubble::Bubble(QWidget *parent):QWidget(parent)
 {
@@ -94,7 +95,7 @@ QSize Bubble::BubbleSize(QString content)
 void Bubble::PrepareDrawingParameters()
 {
     if(m_userType == User_She){
-        IconPixmap = QPixmap(":/images/Customer Copy.png");
+        IconPixmap = QPixmap(":/images/head-1c473e4d-d4d8-48f6-84be-b40c90eae1d3.jpg");
         IconRect = QRect(IconVerMargin,IconHorMargin,IconWidth,IconHeight);
         TriangleRect = QRect(IconRect.x()+IconRect.width(),0,TriangleMargin+TriangleWidth,this->height());
         TrianglePoints[0] = QPoint(TriangleRect.x()+TriangleMargin,30);
@@ -105,7 +106,7 @@ void Bubble::PrepareDrawingParameters()
         BubbleRect.setRect(TriangleRect.x()+TriangleRect.width(),BubbleHorMargin,BubbleWidth,BubbleHeight);
         ContentRect.setRect(BubbleRect.x()+ContentHorMargin,BubbleRect.y()+ContentVerMargin,ContentWidth,ContentHeight);
     }else if(m_userType == User_Me){
-        IconPixmap = QPixmap(":/images/CustomerService.png");
+        IconPixmap = QPixmap(":/images/head-5d80d707-8b18-40fb-a956-eb4dcbed1175.jpg");
         IconRect = QRect(this->width() - IconVerMargin - IconWidth ,IconHorMargin,IconWidth,IconHeight);
         TriangleRect = QRect(IconRect.x()-TriangleMargin-TriangleWidth,0,TriangleMargin+TriangleWidth,this->height());
         TrianglePoints[0] = QPoint(TriangleRect.x()  ,25);
@@ -120,6 +121,21 @@ void Bubble::PrepareDrawingParameters()
     }
 
     this->update();
+}
+
+void Bubble::RoundedPixmap(QPixmap& inPix,QSize size)
+{
+    // scaled pixmap to a specific size
+    inPix = inPix.scaled(size,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+
+    //set bitmap
+    QBitmap bitmap(inPix.size());
+    bitmap.fill(Qt::color0);
+    QPainter mapPainter(&bitmap);
+    mapPainter.setBrush(Qt::color1);
+    mapPainter.drawRoundedRect(0,0,inPix.width(),inPix.height(),inPix.width()/2,inPix.height()/2);
+    inPix.setMask(bitmap);
+
 }
 
 QSize Bubble::calContentSize(QString content)
@@ -142,6 +158,7 @@ void Bubble::paintEvent(QPaintEvent *event)
     painter.setBrush(QBrush(Qt::gray));
 
     //Icon
+    RoundedPixmap(IconPixmap,IconRect.size());
     painter.drawPixmap(IconRect,IconPixmap);
 
     //bubble border
