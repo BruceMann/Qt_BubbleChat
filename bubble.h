@@ -35,7 +35,7 @@ public:
     void SetContentType(Content_Type type){m_contentType = type;}
     void SetUserType(User_Type type){m_userType = type;}
 
-    void RoundedPixmap(QPixmap &inPix, QSize size);
+    void RoundedPixmap(QPixmap &inOutPix, QSize size);
 
 protected:
     void paintEvent(QPaintEvent* event);

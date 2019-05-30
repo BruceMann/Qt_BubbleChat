@@ -123,19 +123,18 @@ void Bubble::PrepareDrawingParameters()
     this->update();
 }
 
-void Bubble::RoundedPixmap(QPixmap& inPix,QSize size)
+void Bubble::RoundedPixmap(QPixmap& inOutPix,QSize size)
 {
     // scaled pixmap to a specific size
-    inPix = inPix.scaled(size,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+    inOutPix = inOutPix.scaled(size,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
 
     //set bitmap
-    QBitmap bitmap(inPix.size());
+    QBitmap bitmap(inOutPix.size());
     bitmap.fill(Qt::color0);
     QPainter mapPainter(&bitmap);
     mapPainter.setBrush(Qt::color1);
-    mapPainter.drawRoundedRect(0,0,inPix.width(),inPix.height(),inPix.width()/2,inPix.height()/2);
-    inPix.setMask(bitmap);
-
+    mapPainter.drawRoundedRect(0,0,inOutPix.width(),inOutPix.height(),inOutPix.width()/2,inOutPix.height()/2);
+    inOutPix.setMask(bitmap);
 }
 
 QSize Bubble::calContentSize(QString content)
